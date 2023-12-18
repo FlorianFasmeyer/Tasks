@@ -1,0 +1,74 @@
+﻿<Window 
+    DataContext="{StaticResource MainWindowViewModel}"
+    x:Class="TaskList.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:TaskList.View"
+    mc:Ignorable="d"
+    Title="Simple Task List"
+    WindowStyle="None"
+    AllowsTransparency="True"
+    ResizeMode="CanResize"
+    Height="500"
+    Width="590"
+    MinHeight="300"
+    MinWidth="400"
+    MaxWidth="590"
+    >
+    <!-- Allows for window resizing from all sides -->
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid MouseLeftButtonDown="GrabOrMaximizeWindow">
+            <!-- Header Color and Title -->
+            <Rectangle Fill="SkyBlue"/>
+            
+            <TextBlock 
+                Text="Tasks !"  
+                FontWeight="ExtraLight"
+                FontSize="28" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"/>
+            
+            <!-- Window Controls -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Button Content="＿" Width="40" Height="30" BorderBrush="Transparent" Background="Transparent" FontSize="12" Click="MinimizeWindow"/>
+                <Button Content="🗖" Width="40" Height="30" BorderBrush="Transparent" Background="Transparent" FontSize="14" Click="MaximizeWindow"/>
+                <Button Content="╳" Width="40" Height="30" BorderBrush="Transparent" Background="Transparent" FontSize="12" Click="CloseWindow"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Tasks -->
+        <ListView Grid.Row="1" HorizontalContentAlignment="Center" BorderBrush="Transparent" SelectionMode="Single" ItemsSource="{Binding Tasks}" SelectedItem="{Binding SelectedTask}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="150"/>
+                    <GridViewColumn Header="Done?" DisplayMemberBinding="{Binding Status, Converter={StaticResource BooleanToYesNoConverter}}" Width="45"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="380"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Controls -->
+        <Grid Grid.Row="2" HorizontalAlignment="Stretch" Background="SkyBlue">
+            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Width="30" Height="30" FontSize="16" Margin="2" Background="White" BorderBrush="Transparent" Command="{Binding AddCommand}">+</Button>
+                <Button Width="30" Height="30" FontSize="16" Margin="2" Background="White" BorderBrush="Transparent" Command="{Binding RemoveCommand}">-</Button>
+                <Button Width="50" Height="30" FontSize="16" Margin="2" Background="White" BorderBrush="Transparent" Command="{Binding EditCommand}">Edit</Button>
+                <Button Width="50" Height="30" FontSize="16" Margin="2" Background="White" BorderBrush="Transparent" Command="{Binding DoneCommand}">Done</Button>
+            </StackPanel>
+        </Grid>
+        
+    </Grid>
+</Window>
